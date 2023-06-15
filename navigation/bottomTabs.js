@@ -11,6 +11,7 @@ import ProfileScreen from '../screens/profileScreen';
 import Setting from '../screens/settingScreen';
 import AccountScreen from '../screens/accountScreen';
 import SendMoneyScreen from '../screens/sendMoneyScreen';
+import StartSCreen from '../screens/startScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -180,6 +181,7 @@ const BottomTab = () => {
                     </View>
                 )
             }}/>
+            
         </Tab.Navigator>
   );
 }
@@ -196,4 +198,5 @@ const styles = StyleSheet.create({
         elevation: 5,
     }
 })
+
 export default BottomTab;

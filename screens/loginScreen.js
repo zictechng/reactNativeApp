@@ -1,4 +1,8 @@
-import React , {useState} from 'react';
+import React , {useContext, useEffect, useState} from 'react';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../components/UserContext'; 
+import { DataContext } from '../components/appDataContext';
 import { StatusBar } from 'expo-status-bar';
 import {  Alert, StyleSheet, Text, TextInput, View, Image, Dimensions,
     Button, TouchableOpacity,
@@ -11,6 +15,8 @@ import Feather from 'react-native-vector-icons/Feather'
 import { ScrollView } from 'react-native-gesture-handler';
 import client from '../api/client';
 
+import { setDataInLocalStorage } from '../components/localData';
+
 
 const LoginScreen = ({navigation}) => {
 
@@ -19,14 +25,38 @@ const LoginScreen = ({navigation}) => {
         password: '',
         check_textInputChange: false,
         secureTextEntry: true,
-
         // for input validation
         isValidUser: true,
         isValidPassword: true,
 
     });
+    
+    const [userLoggedToken, setUserLoggedToken] = useContext(UserContext);
+    
+    const [localState, setLocalState] = useState('');
+    const [localUserInfo, setLocalUserInfo] = useState('');
 
-    const [foundUser, setFoundUser] = useState('');
+
+    //console.log("User Token from login Page ", userLoggedToken);
+   
+
+    // get local storage variable here...
+    _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem('alreadyLaunch');
+          if (value !== null) {
+            setLocalState(value);
+           // console.log(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+          //console.log("Local error here ", error.message);
+        }
+      };
+    // here we call the function into action by using useEffect hook
+      useEffect(() =>{
+        _retrieveData()
+       })
 
     // function to determine when to show the check icon in the input field
     const textInputChange = (val) => {
@@ -89,7 +119,6 @@ const LoginScreen = ({navigation}) => {
         }
     }
 
-
     const loginAction = async () =>{
         
         if(data.username.length == 0 || data.password.length == 0){
@@ -106,36 +135,60 @@ const LoginScreen = ({navigation}) => {
             password: data.password,
              })
             .then(res => {
-                console.log('result from backend ', res.data.msg)
+                //console.log('result from backend ', res.data)
 
                 if(res.data.msg =='200'){
-                    Alert.alert("Successful", "Account authenticated!",[
-                        {text: "Okay"}
-                    ]);
-                } else if(res.msg == '401') {
-                    Alert.alert("Login failed", "No user found",[
-                        {text: "Okay"}
-                    ]);
+                    Dialog.show({
+                        type: ALERT_TYPE.SUCCESS,
+                        title: 'Success',
+                        textBody: 'Congrats! account authenticated',
+                        button: 'close',
+                      });
+                 AsyncStorage.setItem('USER_LOCAL_INFO', JSON.stringify(res.data.userData))
+                 AsyncStorage.setItem('USER_TOKEN', JSON.stringify(res.data.token))
+                 setDataInLocalStorage('USER_DATA', JSON.stringify(res.data.userData))
+                 
+                 setLocalUserInfo(res.data.userData)
+                 setUserLoggedToken(res.data.token)
+              
+                //  Alert.alert("Successful", "Account authenticated!",[
+                        
+                //         {text: "Okay"}
+                //     ]);
+                } else if(res.data.status == '401') {
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Failed',
+                        textBody: 'No user found.',
+                        })
+                    // Alert.alert("Login failed", "No user found",[
+                    //     {text: "Okay"}
+                    // ]);
                 }
-                else if(res.data.msg == '404'){
-                    Alert.alert("Login failed", "Username or Password incorrect",[
-                        {text: "Okay"}
-                    ]);
+                else if(res.data.status == '404'){
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Failed',
+                        textBody: 'Username or Password incorrect.',
+                        })
+                    // Alert.alert("Login failed", "Username or Password incorrect",[
+                    //     {text: "Okay"}
+                    // ]);
                 } else {
-                    Alert.alert("Error", "Something went wrong",[
-                        {text: "Okay"}
-                    ]);
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Error',
+                        textBody: 'Sorry, Something went wrong.',
+                        })
+                    // Alert.alert("Error", "Something went wrong",[
+                    //     {text: "Okay"}
+                    // ]);
                 }
-             console.log('My username from backend ', res)
+             //console.log('My username from backend ', res.data.userData)
             });
         } catch (error) {
             console.log(error.message)
-            if(error.data == "401"){
-                Alert.alert("Login failed", "No user found",[
-                    {text: "Okay"}
-                ]);
-               }
-        }
+            }
     }
 
   return (
@@ -143,7 +196,7 @@ const LoginScreen = ({navigation}) => {
     <StatusBar backgroundColor="#009387" style="light" />
 
     <View style={styles.header}>
-        <Text style={styles.text_header}>Welcome</Text>
+        <Text style={styles.text_header}>Welcome {localState}</Text>
         <Text style={styles.text_header_section}>Login to continue...</Text>
     </View>
 

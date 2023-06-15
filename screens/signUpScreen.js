@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 
 import client from '../api/client'; 
 
@@ -137,7 +138,7 @@ const SignUpScreen = ({navigation}) =>
             password: data.password,
         }
         try {
-            console.log('Signup Data ', newData);
+            //console.log('Signup Data ', newData);
             
             const res = await client.post('/api/register', {
             first_name: data.first_name,
@@ -147,32 +148,54 @@ const SignUpScreen = ({navigation}) =>
             username: data.username
             })
             .then(res => {
-                console.log('result from backend ', res)
+               // console.log('result from backend ', res)
                 if(res.data.msg =='201'){
-                    Alert.alert("Successful", "Account created successfully!",[
-                        {text: "Okay"}
-                    ]);
-                } else if(res.data.msg == '400') {
-                    Alert.alert("Failed", "All fields required",[
-                        {text: "Okay"}
-                    ]);
+                    Dialog.show({
+                        type: ALERT_TYPE.SUCCESS,
+                        title: 'Success',
+                        textBody: 'Congrats! Account created successfully',
+                        button: 'close',
+                      })
+                    // Alert.alert("Successful", "Account created successfully!",[
+                    //     {text: "Okay"}
+                    // ]);
+                } else if(res.data.status == '400') {
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Error',
+                        textBody: 'All fields required',
+                         })
+                    // Alert.alert("Failed", "All fields required",[
+                    //     {text: "Okay"}
+                    // ]);
                 }
-                else if(res.msg == '409'){
-                    Alert.alert("Login failed", "Username already taken",[
-                        {text: "Okay"}
-                    ]);
-                } else if(res.data.msg == '401') {
-                    Alert.alert("Failed", "Invalid user details",[
-                        {text: "Okay"}
-                    ]);
+                else if(res.data.status == '409'){
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Error',
+                        textBody: 'Username already taken',
+                       })
+                    // Alert.alert("Failed", "Username already taken",[
+                    //     borderRadius =50,
+                    //     {text: "Okay"}
+                    // ]);
+                } else if(res.data.status == '401') {
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Failed',
+                        textBody: 'Invalid user details',
+                      })
+                    // Alert.alert("Failed", "Invalid user details",[
+                    //     {text: "Okay"}
+                    // ]);
                 }
                 else {
-                    Alert.alert("Error", "Something went wrong",[
-                        {text: "Okay"}
-                    ]);
-                }
-           
-           
+                    Toast.show({
+                        type: ALERT_TYPE.DANGER,
+                        title: 'Error',
+                        textBody: 'Sorry, Something went wrong',
+                       })
+                    }
             });
         } catch (error) {
             console.log(error.message)

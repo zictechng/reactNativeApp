@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {  StyleSheet, Text, View, Image, Dimensions,
     Button, TouchableOpacity} from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-    
+import  { UserContext }  from '../components/UserContext';    
 const StartSCreen =({navigation}) => {
+
+  let  userLoggedToken = useContext(UserContext);
+  let authToken = useContext(UserContext);
+
+  //console.log("context Info From Start Page ", userLoggedToken)
+
   return (
     <View style={styles.container}>
     {/* <Text style={styles.textColor}>
@@ -28,7 +34,7 @@ const StartSCreen =({navigation}) => {
     <Text style={styles.title}>Digitized your finance</Text>
     <Text style={styles.text}>Sign in to discover more...</Text>
     <View style={styles.button}>
-<TouchableOpacity onPress={() => navigation.navigate('SignInScreen')}>
+<TouchableOpacity onPress={() => navigation.navigate('Login')}>
   <LinearGradient
   colors={['#08d4c4', '#01ab9d']}
   style={styles.signIn}
