@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { ALERT_TYPE, Dialog, AlertNotificationRoot, Toast } from 'react-native-alert-notification';
 import * as Font from 'expo-font';
 import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { UserContext } from './components/UserContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +10,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
@@ -29,8 +31,30 @@ import ProfilePageTwo from './screens/ProfilePageTwo';
 
 const AppStack = createStackNavigator();
 
+SplashScreen.preventAutoHideAsync();
+
 const App = () => {
   
+  const [fontsLoaded] = useFonts({
+    'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+    'RobotoBold': require('./assets/fonts/Roboto-Bold.ttf'),
+    'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
+    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
+    'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
+    'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
+  });
+
+  const handleOnLayout = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync(); //hide the splashscreen
+    }
+  }, [fontsLoaded]);
+
+  // do a check here to see if loaded
+  if (!fontsLoaded) {
+    return null;
+  }
   // declare all properties you want to the DataContext here
   
   const [userDetails, setUserDetails] = useState([]);
@@ -48,28 +72,6 @@ const App = () => {
   const [myToken, setMyToken] = useState({});
   const [fontsState, setFontsState] = useState(false)
   
-  // const [fontsLoaded] = useFonts({
-  //   'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-  //   'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf'),
-  //   'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
-  //   'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-  //   'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
-  //   'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
-  //'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
-  // });
-  
-  const useFonts = async () => {
-    await Font.loadAsync({
-      'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-      'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
-      'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-      'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
-      'RobotoBold': require('./assets/fonts/Roboto-Bold.ttf'),
-      'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
-      'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
-      });
-    setFontsState(true);
-  };
   //console.log("User Token from APP Page ", userLoggedToken);
 
   console.log("My Access Token: ", userLoggedToken );
@@ -138,7 +140,6 @@ useEffect(() =>{
       });
     
  }, 1000)
- useFonts();
     setIsLoading(false);
     _getUserLocalInfo();
     _getUserTokenInfo()
@@ -152,12 +153,12 @@ useEffect(() =>{
 // }
   //console.log("My Local Token ", userLogToken);
 // show loading effect why application is launched
-if(isFirstLaunch){
-  return <View style={{flex:1, justifyContent: 'center', alignContent:'center'}}>
-    <ActivityIndicator size='large' color="#00ff00"
-    />
-    </View>
-}
+// if(isFirstLaunch){
+//   return <View style={{flex:1, justifyContent: 'center', alignContent:'center'}}>
+//     <ActivityIndicator size='large' color="#00ff00"
+//     />
+//     </View>
+// }
 
 // use the function to display according
 // if(isFirstLaunch == null){
@@ -183,18 +184,23 @@ if(isFirstLaunch){
 // } else 
   return (
       <AlertNotificationRoot>
+        <View onLayout={handleOnLayout}>
         <UserContext.Provider value={[userLoggedToken, setUserLoggedToken]}>
-            <NavigationContainer>
-              <Home />
-              {/* <AppStack.Navigator screenOptions={{
-                    headerShown: false
-                  }}>
-                  <AppStack.Screen name='Home' component={Home} />
-                  <AppStack.Screen name='Welcome' component={Welcome} />
-              </AppStack.Navigator> */}
-            </NavigationContainer>
-            
-        </UserContext.Provider>
+              <NavigationContainer>
+                <Home />
+                {/* <AppStack.Navigator screenOptions={{
+                      headerShown: false
+                    }}>
+                    <AppStack.Screen name='Home' component={Home} />
+                    <AppStack.Screen name='Welcome' component={Welcome} />
+                </AppStack.Navigator> */}
+              </NavigationContainer>
+              
+          </UserContext.Provider>
+        </View>
+          
+        
+        
       </AlertNotificationRoot>
 
 
