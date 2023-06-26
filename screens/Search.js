@@ -19,8 +19,8 @@ const Search = ({navigation}) => {
           {/* back button with header */}
 
         <View style={{flex:1, backgroundColor:'#fff',
-      flexDirection:'row',justifyContent:'flex-start',
-      alignItems:'center'}}>
+            flexDirection:'row',justifyContent:'flex-start',
+            alignItems:'center'}}>
           {/*Back button */}
             <TouchableOpacity onPress={() =>navigation.navigate('Dashboard')}
             style={{padding:12}}>
@@ -28,7 +28,7 @@ const Search = ({navigation}) => {
             </TouchableOpacity>
             
           {/* header text */}
-          <Text style={{width:'80%', textAlign:'center',
+          <Text style={{width:'40%', textAlign:'center',
         fontFamily:'RobotoBold', fontSize:18, color:'#333'}}>Live Market</Text>
 
         </View>
@@ -50,7 +50,7 @@ const Search = ({navigation}) => {
 
       {/* horizontal scroll section */}
         <View style={{flex:1.5, backgroundColor:'#fff', paddingHorizontal:'2%',
-      marginTop:8, marginBottom:8}}>
+            marginTop:8, marginBottom:8}}>
           {/* copy horizontal flatlist from dashboard */}
         <FlatList keyExtractor={(item)=>item.id}
                     data={dummyData.coins}
@@ -98,15 +98,15 @@ const Search = ({navigation}) => {
 
                     )}
                     horizontal={true}
-           />
-        </View>
+                />
+          </View>
 
-      {/* vertical scroll section */}
+            {/* vertical scroll section */}
 
-        <View style={{flex:3.8, backgroundColor:'#fff',
-    paddingHorizontal:'2%'}}>
+            <View style={{flex:3.8, backgroundColor:'#fff',
+                paddingHorizontal:'2%'}}>
 
-      {/* copy vertical flatlist from dashboard */}
+                    {/* copy vertical flatlist from dashboard */}
 
                       <FlatList
                         keyExtractor={(item)=>item.id}
@@ -155,7 +155,7 @@ const Search = ({navigation}) => {
                         )}
                       />
 
-      </View>
+            </View>
 
       </View>
     </View>

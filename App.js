@@ -28,33 +28,34 @@ import {Welcome, Home} from './screens/';
 import PageSetting from './screens/PageSetting';
 import ProfilePage from './screens/ProfilePage';
 import ProfilePageTwo from './screens/ProfilePageTwo';
+import FundTransferPage from './screens/FundTransferPage';
+import FundSend from './screens/FundSend';
+import HomePage from './screens/HomePage';
+import ProfileSetting from './screens/ProfileSetting';
 
 const AppStack = createStackNavigator();
 
-SplashScreen.preventAutoHideAsync();
+//SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   
-  const [fontsLoaded] = useFonts({
-    'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
-    'RobotoBold': require('./assets/fonts/Roboto-Bold.ttf'),
-    'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
-    'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-    'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
-    'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
-    'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
-  });
+  // const [fontsLoaded] = useFonts({
+  //   'Roboto-Medium': require('./assets/fonts/Roboto-Medium.ttf'),
+  //   'RobotoBold': require('./assets/fonts/Roboto-Bold.ttf'),
+  //   'Roboto-Italic': require('./assets/fonts/Roboto-Italic.ttf'),
+  //   'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+  //   'Roboto-Black': require('./assets/fonts/Roboto-Black.ttf'),
+  //   'Roboto-BlackItalic': require('./assets/fonts/Roboto-BlackItalic.ttf'),
+  //   'Inter-Bold': require('./assets/fonts/Inter-Bold.otf'),
+  // });
 
-  const handleOnLayout = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync(); //hide the splashscreen
-    }
-  }, [fontsLoaded]);
+  // const handleOnLayout = useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync(); //hide the splashscreen
+  //   }
+  // }, [fontsLoaded]);
 
-  // do a check here to see if loaded
-  if (!fontsLoaded) {
-    return null;
-  }
+  
   // declare all properties you want to the DataContext here
   
   const [userDetails, setUserDetails] = useState([]);
@@ -145,6 +146,10 @@ useEffect(() =>{
     _getUserTokenInfo()
 }, []);
 
+// // do a check here to see if loaded
+// if (!fontsLoaded) {
+//   return null;
+// }
 // if(!fontsState){
 //   return (
 //     <AppLoading startAsync={useFonts()}
@@ -184,23 +189,20 @@ useEffect(() =>{
 // } else 
   return (
       <AlertNotificationRoot>
-        <View onLayout={handleOnLayout}>
-        <UserContext.Provider value={[userLoggedToken, setUserLoggedToken]}>
-              <NavigationContainer>
-                <Home />
-                {/* <AppStack.Navigator screenOptions={{
-                      headerShown: false
-                    }}>
-                    <AppStack.Screen name='Home' component={Home} />
-                    <AppStack.Screen name='Welcome' component={Welcome} />
-                </AppStack.Navigator> */}
-              </NavigationContainer>
-              
-          </UserContext.Provider>
-        </View>
-          
-        
-        
+       
+          <UserContext.Provider value={[userLoggedToken, setUserLoggedToken]}>
+                <NavigationContainer>
+                  <HomePage />
+                  {/* <AppStack.Navigator screenOptions={{
+                        headerShown: false
+                      }}>
+                      <AppStack.Screen name='Home' component={Home} />
+                      <AppStack.Screen name='Welcome' component={Welcome} />
+                  </AppStack.Navigator> */}
+                </NavigationContainer>
+                
+            </UserContext.Provider>
+       
       </AlertNotificationRoot>
 
 
