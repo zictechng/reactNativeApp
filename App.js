@@ -32,6 +32,7 @@ import FundTransferPage from './screens/FundTransferPage';
 import FundSend from './screens/FundSend';
 import HomePage from './screens/HomePage';
 import ProfileSetting from './screens/ProfileSetting';
+import VerifyPhone from './screens/VerifyPhone';
 
 const AppStack = createStackNavigator();
 
@@ -192,13 +193,14 @@ useEffect(() =>{
        
           <UserContext.Provider value={[userLoggedToken, setUserLoggedToken]}>
                 <NavigationContainer>
-                  <HomePage />
+                  <VerifyPhone />
                   {/* <AppStack.Navigator screenOptions={{
                         headerShown: false
                       }}>
                       <AppStack.Screen name='Home' component={Home} />
                       <AppStack.Screen name='Welcome' component={Welcome} />
                   </AppStack.Navigator> */}
+                
                 </NavigationContainer>
                 
             </UserContext.Provider>

@@ -11,7 +11,7 @@ import {
   import { widthPercentageToDP as wp, 
     heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { SafeAreaView, View, Text, StyleSheet, Image, Alert, Modal, ActivityIndicator,
-  TextInput, TouchableOpacity, StatusBar, Dimensions, Pressable} from 'react-native';
+  TextInput, TouchableOpacity, StatusBar, Dimensions, Pressable, ImageBackground} from 'react-native';
 
 import { Ionicons, Entypo, SimpleLineIcons, FontAwesome, FontAwesome5} from '@expo/vector-icons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
@@ -26,6 +26,21 @@ import { SimpleModal } from '../components/SimpleModal';
 import ActionSheet from '@alessiocancian/react-native-actionsheet';
 
 import ProgressBar from 'react-native-progress-bar-horizontal';
+
+
+import {
+  BallIndicator,
+  BarIndicator,
+  DotIndicator,
+  MaterialIndicator,
+  PacmanIndicator,
+  PulseIndicator,
+  SkypeIndicator,
+  UIActivityIndicator,
+  WaveIndicator,
+} from 'react-native-indicators';
+
+import CircularProgress, { CircularProgressBase } from 'react-native-circular-progress-indicator';
 
 import Loader from '../components/Loader';
 
@@ -74,11 +89,11 @@ export default function HomePage() {
 
   const [showModal, setshowModal] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [btn1Loading, setBtn1Loading] = useState(false);
 
-  const [btn2Loading, setBtn2Loading] = useState(false);
+  const [btn2Loading, setBtn2Loading] = useState(true);
 
   const [btn3Loading, setBtn3Loading] = useState(false);
 
@@ -88,7 +103,10 @@ export default function HomePage() {
 
   const setData = (data) =>{
     setchooseData(data);
-  }
+  };
+
+ //const  bgImage = {require('../assets/bg4.jpg')};
+ //const bgImage = {uri: '../assets/bg4.jpg'};
 
   const sheet = useRef();
   // React.useEffect(() =>{
@@ -143,7 +161,13 @@ export default function HomePage() {
 //       setIsLoading(false);
 //     }, 3000)
 //  }
-
+const props = {
+  activeStrokeWidth: 20,
+  inActiveStrokeWidth: 25,
+  inActiveStrokeOpacity: 0.1,
+  activeStrokeSecondaryColor: '#C25AFF', // this act as gradient but not important
+  
+};
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "#eBecf4"}}>
@@ -154,9 +178,10 @@ export default function HomePage() {
                 {/* header of the screen */}
             <LinearGradient colors={[colors.orange, colors.pink]} start={[0,0]} end={[1,1]}
             style={{ elevation: 30, shadowColor: '#930D2F'}}>
+              
+
                 <View style={[gs.rowBetween, {marginTop: 25, marginHorizontal: 10}]}>
-                    
-                    {/* <View style = {styles.circleIconLeft}>
+                   {/* <View style = {styles.circleIconLeft}>
                         
                     </View> */}
                     {/* <View>
@@ -183,6 +208,8 @@ export default function HomePage() {
                     <Text style={[styles.titleSend, {color: "#fff"}]}>Open an account</Text>
                     <Text style={[styles.subTitleSend, {color:"#333"}]}>To open an account, kindly fill the details below correctly and ensure to use valid email address and phone number.</Text>
                 </View> */}
+
+                
                 <View style={styles.balanceRow}>
                     <Text style={styles.balanceTitle}>{'\u20A6'}29,000.00 <View style={styles.balanceIcon}>
                     <FontAwesome name="line-chart" color={{color:"#00CC00"}} size={20} />
@@ -197,7 +224,7 @@ export default function HomePage() {
             <Loader loading={isLoading} />
 
             {/* body of the screen */}
-            <ScrollView>
+            <ScrollView style={{marginBottom: 50}}>
               {/* This show a dash round line */}
                 {/* <View style={styles.placeholder}>
                   <View style={styles.placeholderInset}>
@@ -205,6 +232,26 @@ export default function HomePage() {
                   </View>
                 </View> */}
 
+                <View style={{
+                      justifyContent:'space-between', 
+                      flexDirection:'row', 
+                      marginHorizontal: 10, 
+                      marginTop: 10, 
+                      marginBottom: 10}}>
+                  <View>
+                    <Text>Menu 1</Text>
+                   
+                 </View>
+                    <View style={{
+                      justifyContent:'space-between', 
+                      flexDirection:'row', 
+                      width: '35%'}}>
+                        <Text>Icon1 </Text>
+                        <Text>Icn2 </Text>
+                        <Text>Icon3 </Text>
+                    </View>
+                  </View>
+                  
                     <View style={styles.middlePage}>
                       <Text style={styles.chatHeader}>Transaction Overview</Text>
                       <MyBarChart />
@@ -214,10 +261,13 @@ export default function HomePage() {
                         <View style={styles.middlePage2}>
                            <MyBarChart />
                         </View> */}
-
-                        <TouchableOpacity style={[styles.middleSection, {marginTop: 10,}]}
+                        
+                        
+                        <TouchableOpacity style={[styles.middleSection, {marginTop: 10, overflow: 'hidden'}]}
                         onPress={() =>{ Alert.alert('You click to apply for loan') }}>
-
+                          <Image style={styles.bgImage} source={require('../assets/bg11.png')}/> 
+                          
+                         
                             {/* icon or symbol */}
                             <View style={{flexDirection:'row', alignItems:'center'}}>
 
@@ -252,28 +302,112 @@ export default function HomePage() {
                                 <Icon name='chevron-circle-up'
                                 color='gree' />
                                 </View> */}
-
+                           
                             </View>
+                            
                         </TouchableOpacity>
-                        
+                          
+                          {/* Indicators types here */}
+                          <Text style={{fontWeight:'bold',color:'#aaa', fontSize:18, marginTop: 5,
+                                        marginHorizontal: 10}}>
+                                  Indicator Type here
+                                  </Text>
+                        <DotIndicator color='#F2688B' size={8} />
+                        <BarIndicator color='#F2688B' size={20} />
+                        <MaterialIndicator color='#F2688B' size={20} />
+                        <BallIndicator color='#F2688B' size={20} />
+                        <PacmanIndicator color='#F2688B' size={20} />
+                        <PulseIndicator color='#F2688B' size={20} />
+                        <SkypeIndicator color='#F2688B' size={20} />
+                        <UIActivityIndicator color='#F2688B' size={20} />
+                        <WaveIndicator color='#F2688B' size={20} />
+
+                          
+                          {/* circle progress bar here */}
+                          <View style={{marginHorizontal: 10, marginTop: 10, marginBottom: 10}}>
+                              <View style={{flexDirection: 'column', alignItems:'center', justifyContent:'center', marginVertical: 5}}>
+
+                              <CircularProgressBase
+                                {...props}
+                                value={80}
+                                radius={125}
+                                activeStrokeColor={'#e84118'}
+                                inActiveStrokeColor={'#e84118'}
+                                
+                              >
+                                <CircularProgressBase
+                                  {...props}
+                                  value={87}
+                                  radius={100}
+                                  activeStrokeColor={'#badc58'}
+                                  inActiveStrokeColor={'#badc58'}
+                                  
+                                >
+                                  <CircularProgressBase
+                                    {...props}
+                                    value={62}
+                                    radius={75}
+                                    activeStrokeColor={'#18dcff'}
+                                    inActiveStrokeColor={'#18dcff'}
+                                    
+                                  />
+                                </CircularProgressBase>
+                              </CircularProgressBase>
+
+                                <CircularProgress
+                                  value={60}
+                                  radius={120}
+                                  duration={1000}
+                                  progressValueColor={'#aaa'}
+                                  maxValue={200}
+                                  title={'KM/H'}
+                                  titleColor={'#F2688B'}
+                                  titleStyle={{fontWeight: 'bold'}}
+                                />
+                                <CircularProgress
+                                  value={60}
+                                  activeStrokeWidth={8}
+                                  progressValueColor={'#aaa'}
+                                />
+
+                              <CircularProgress
+                                value={60}
+                                valuePrefix={'$'}
+                                inActiveStrokeColor={'#2ecc71'}
+                                inActiveStrokeOpacity={0.2}
+                              />
+
+                              <CircularProgress
+                                value={75}
+                                inActiveStrokeColor={'#2ecc71'}
+                                inActiveStrokeOpacity={0.2}
+                                progressValueColor={'#aaa'}
+                                valueSuffix={'%'}
+                              />
+                              </View>
+                          </View>
+                                <Text style={{fontWeight:'bold',
+                                              color:'#aaa', fontSize:18, marginTop: 5,
+                                              marginHorizontal: 10}}>
+                                              Transfer Limit
+                                  </Text>
                         <View style={{marginHorizontal: 15, backgroundColor: '#F2688B',
-                      borderWidth:1, borderColor:'#ddd', borderRadius: 15,
-                      marginBottom:10,}}>
+                            borderWidth:1, borderColor:'#ddd', borderRadius: 10,
+                            marginBottom:10,}}>
                         
-                              <Text style={{fontWeight:'bold',
-                                        color:'#ea3372', fontSize:18, marginTop: 5,
-                                        paddingLeft: 5, marginBottom: 5}}>
-                                          Transfer Limit 
-                                </Text>
-                                  <View style={{marginHorizontal: 5, flexDirection: 'row'}}>
-                                      <View style={{borderRadius: 8, borderColor:"#aaa", backgroundColor:"#aaa", height: 40, width: 40, marginHorizontal: 5}}>
+                                  <View style={{marginHorizontal: 5, flexDirection: 'row',
+                                alignItems: 'center', justifyContent:'center'}}>
+                                      <View style={{borderRadius: 8, borderColor:"#aaa", backgroundColor:"#aaa", height: 30, width: 30, marginHorizontal: 5,
+                                    marginBottom: 5, marginTop: 5}}>
                                         <FontAwesome5 name="exchange-alt"
-                                          size={25} color="#fff" marginLeft={10} marginTop={8}
+                                          size={15} color="#fff" marginLeft={10} marginTop={8}
                                             />
                                       </View>
+                                    
                                   <ProgressBar 
                                     progress={0.5}
                                     animated={true}
+                                    borderRadius={10}
                                     borderWidth={1}
                                     fillColor="#aaa"
                                     unfilledColor="#fff"
@@ -281,9 +415,12 @@ export default function HomePage() {
                                     width={320}
                                     borderColor="#aaa"
                                     duration={100}
+                                    percentage={35}
+                                    progressColor={"green"}
+
                                   />
                                   </View>
-                                <Text></Text>
+                                
                         </View>
                         <TouchableOpacity style={[styles.middleSection, {marginTop: 10, backgroundColor:'#90ccde'}]}
                         onPress={() =>{ Alert.alert('You click to transfer limit') }}>
@@ -298,43 +435,31 @@ export default function HomePage() {
                                   />
                               </View>
                                  
-                              {/* Coin symbol */}
+                              {/* progress bar transfer limit */}
                               <View style={{flexDirection:'column',
-                                justifyContent:'flex-start', marginLeft: 10,}}>
+                                justifyContent:'flex-start', marginLeft: 10, width: 300, marginBottom: 5}}>
                               
-                              <Text style={{fontWeight:'bold',
-                                  color:'#fff', fontSize:18, marginTop: 5}}>Transfer Limit</Text>
-                                   <ProgressBar 
+                                  <Text style={{fontWeight:'bold',
+                                      color:'#fff', fontSize:18, marginTop: 5}}>
+                                  Transfer Limit
+                                  </Text>
+                                <ProgressBar 
                                   progress={0.5}
                                   animated={true}
                                   borderWidth={1}
-                                  fillColor="#aaa"
+                                  fillColor="#F2688B"
                                   unfilledColor="#fff"
                                   height={20}
-                                  borderColor="#aaa"
-                                  
+                                  borderColor="#F2688B"
                                   duration={100}
+                                  borderRadius={10}
                                 />
+                               
                               </View>
                             </View>
                             
                             {/* coin price and indicator */}
-                            <View style={{flexDirection:'column',
-                               alignItems:'center',
-                                justifyContent:'center'}}>
-                              {/* price */}
-                              <FontAwesome name="angle-right"
-                                size={25} color="#fff" 
-                              />
-                              {/* indicator */}
-                                {/* <View style={{flexDirection:'row', alignItems:'center',
-                                  justifyContent:'center'}}>
-                                  <Text style={{fontWeight:'Bold', fontSize:12}}>Text</Text>
-                                <Icon name='chevron-circle-up'
-                                color='gree' />
-                                </View> */}
-
-                            </View>
+                            
                         </TouchableOpacity>
                     
                     {/* loading buttons */}
@@ -680,7 +805,11 @@ const styles = StyleSheet.create({
         padding: 24,
         flex: 1,
     },
-
+    bgImage:{
+      position: 'absolute',
+      bottom: -6,
+      right: 20,
+     },
     button:{
       width: '30%',
       height: 40, 
@@ -923,7 +1052,6 @@ const styles = StyleSheet.create({
         borderRadius:15, justifyContent:'space-between',
         marginHorizontal: 10,
         backgroundColor: "#F2688B",
-       
         paddingRight:10, 
         marginBottom:10,
         height: "auto",

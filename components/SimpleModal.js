@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 
 const WIDTH = Dimensions.get('window').width;
-const HEIGHT_MODAL = 150;
+const HEIGHT_MODAL = 180;
 
 const SimpleModal = (props) => {
 
@@ -17,9 +17,16 @@ const SimpleModal = (props) => {
     >
         <View style={styles.modal}>
             <View style={styles.textView}>
-                <Text style={[styles.text, {fontSize: 20, color:'#000'}]}>Confirm</Text>
-                
-                <Text style={[styles.text]}>Are you sure you want to do this ?</Text>
+                <View style={{backgroundColor: '#F2688B', 
+                    width: '100%', 
+                    height: 50,
+                    borderTopEndRadius: 10, 
+                    borderTopStartRadius:10, 
+                    marginTop : -10, justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={[styles.text, {fontSize: 20, color:'#fff'}]}>Confirm</Text>
+                </View>
+               
+                <Text style={[styles.text, {marginTop: 20}]}>Are you sure you want to do this ?</Text>
             </View>
             
 
@@ -60,6 +67,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         backgroundColor: 'white',
         borderRadius: 10,
+        
         shadowColor: '#000',
         shadowOffset: {
         width: 0,
